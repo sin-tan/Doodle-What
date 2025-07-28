@@ -20,6 +20,8 @@ const Whiteboard = () => {
   const [roundsLeft, setRoundsLeft] = useState(null);
   const [rounds, setRounds] = useState(null); // NEW: store rounds from URL
   const [gameStarted, setGameStarted] = useState(false); // NEW
+  const [showWinnerModal, setShowWinnerModal] = useState(false);
+  const [winnerText, setWinnerText] = useState('');
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -69,7 +71,8 @@ const Whiteboard = () => {
     });
 
     socketRef.current.on('correct-guess', ({ guesser }) => {
-      setChatMessages(prev => [...prev, { name: '🎉 System', message: `${guesser} guessed the word correctly!` }]);
+      //setChatMessages(prev => [...prev, { name: , message: ` ` }]);
+      // Do NOT clear setWordToGuess here; keep showing the word to the drawer until the round ends
     });
 
     socketRef.current.on('game-started', ({ drawerName, wordHint, roundsLeft, realWord }) => {
@@ -77,6 +80,7 @@ const Whiteboard = () => {
       setRoundsLeft(roundsLeft);
       setGameStarted(true);
       setTimer(30); // Reset timer immediately
+      setShowWinnerModal(false); // Hide winner modal on new game
       //setChatMessages(prev => [...prev, { name: '🟢 System', message: `${drawerName} is now drawing.` }]);
       if (drawerName === name) {
         setWordToGuess(realWord); // Show the real word to the drawer
@@ -100,8 +104,19 @@ const Whiteboard = () => {
     socketRef.current.on('game-ended', ({ message }) => {
       setChatMessages(prev => [...prev, { name: '🏁 Game', message }]);
       setDrawer(null);
-      setWordToGuess('');
+      setWordToGuess(''); // Only clear the word when the round/game ends
       setRoundsLeft(null);
+      // Winner logic
+      if (users.length > 0) {
+        const maxScore = Math.max(...users.map(u => u.score || 0));
+        const winners = users.filter(u => (u.score || 0) === maxScore);
+        if (winners.length === 1) {
+          setWinnerText(`🏆 Winner: ${winners[0].name} (${maxScore} points)`);
+        } else {
+          setWinnerText(`🤝 It's a tie! (${maxScore} points)`);
+        }
+        setShowWinnerModal(true);
+      }
     });
 
     socketRef.current.on('set-host', () => {
@@ -207,7 +222,7 @@ const Whiteboard = () => {
             🎮 Start Game
           </button>
         )}
-        {gameStarted && roundsLeft !== null && <p className="wb-info">🕹️ Rounds Left: {roundsLeft}</p>}
+        {gameStarted && roundsLeft !== null && <p className="wb-info">🕹️ Round Left: {roundsLeft}</p>}
         {gameStarted && <p className="wb-info">⏱️ Timer: {timer}s</p>}
       </div>
 
@@ -268,6 +283,37 @@ const Whiteboard = () => {
         />
         <button className="wb-btn wb-btn-chat" onClick={handleSendMessage}>Send</button>
       </div>
+
+      {/* Winner Modal Overlay */}
+      {showWinnerModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: 'rgba(255,255,255,0.95)',
+            borderRadius: '16px',
+            padding: '40px 60px',
+            boxShadow: '0 4px 32px rgba(0,0,0,0.2)',
+            textAlign: 'center',
+            fontSize: '2rem',
+            fontWeight: 'bold',
+            color: '#222'
+          }}>
+            {winnerText}
+            <br/>
+            <button style={{marginTop: '2rem', fontSize: '1.2rem', padding: '0.5em 2em', borderRadius: '8px', border: 'none', background: '#007bff', color: '#fff', cursor: 'pointer'}} onClick={() => setShowWinnerModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
