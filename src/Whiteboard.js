@@ -42,7 +42,13 @@ const Whiteboard = () => {
     const context = canvas.getContext('2d');
     context.lineCap = 'round';
 
-    socketRef.current = io('http://localhost:5000');
+    // Dynamic Socket.IO URL - works for both development and production
+    const socketUrl = process.env.REACT_APP_SOCKET_URL || 
+                     (process.env.NODE_ENV === 'production' ? 
+                      'https://your-backend-url.com' : 
+                      'http://localhost:5000');
+    
+    socketRef.current = io(socketUrl);
     socketRef.current.emit('join-room', { roomId: room, name });
 
     socketRef.current.on('drawing', (data) => {
