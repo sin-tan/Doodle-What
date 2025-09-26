@@ -5,7 +5,7 @@ A real-time multiplayer drawing and guessing game built with React, Node.js, and
 ![Game Preview](https://img.shields.io/badge/Status-Live-brightgreen) ![React](https://img.shields.io/badge/React-18+-blue) ![Node.js](https://img.shields.io/badge/Node.js-16+-green) ![Socket.IO](https://img.shields.io/badge/Socket.IO-Real--time-orange)
 
 ## 🚀 Live Demo
-**[Play Doodle What Now!](https://doodle-what-c7b8-23l2uuqms-tanishkasinghh2-gmailcoms-projects.vercel.app/)**
+**[Play Doodle What Now!]([https://doodle-what-c7b8-23l2uuqms-tanishkasinghh2-gmailcoms-projects.vercel.app/](https://doodle-what-c7b8-f59tk41tv-tanishkasinghh2-gmailcoms-projects.vercel.app/whiteboard?name=wdw&room=F6QEP8&rounds=3))**
 
 ## ✨ Features
 
@@ -76,21 +76,6 @@ This will start:
 - **Points awarded** based on guessing speed
 - **Winner** determined by total points
 
-## 📁 Project Structure
-
-```
-Doodle-What/
-├── public/                 # Static assets
-├── src/                   # React frontend
-│   ├── LandingPage.js     # Home page component
-│   ├── Whiteboard.js      # Main game canvas & logic
-│   ├── App.js            # Main app component
-│   └── *.css            # Styling files
-├── server.js             # Node.js backend server
-├── GAME_GUIDE.md         # Detailed game documentation
-├── package.json          # Dependencies and scripts
-└── README.md            # This file
-```
 
 ## 🔧 Available Scripts
 
@@ -133,14 +118,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
 
-This project is licensed under the MIT License.
-
-## 👤 Author
-
-**Tanishka Singh** ([@sin-tan](https://github.com/sin-tan))
-
----
-
-⭐ **Star this repository if you found it helpful!**
