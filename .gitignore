@@ -88,8 +88,3 @@ pids
 
 # DynamoDB Local files
 .dynamodb/
-
-node_modules/
-build/
-.env
-.DS_Store
